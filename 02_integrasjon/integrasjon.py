@@ -84,6 +84,6 @@ class test_integrasjon(unittest.TestCase):
         to_t = to_trapeser(lambda x: x, 0, 1)
         self.assertTrue(np.abs(to_t - .5) < 1e-15)
 
-    def test_n_trapezoids(self):
+    def test_n_trapeser(self):
         n_t = n_trapeser(lambda x: x, 0, 1, 50)
         self.assertTrue(np.abs(n_t - .5) < 1e-15)
