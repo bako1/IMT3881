@@ -78,12 +78,12 @@ class test_integrasjon(unittest.TestCase):
 
     def test_ett_trapes(self):
         ett_t = ett_trapes(lambda x: x, 0, 1)
-        self.assertTrue(np.abs(ett_t - .5) < 1e-15)
+        self.assertAlmostEqual(ett_t, .5)
 
     def test_to_trapeser(self):
         to_t = to_trapeser(lambda x: x, 0, 1)
-        self.assertTrue(np.abs(to_t - .5) < 1e-15)
+        self.assertAlmostEqual(to_t, .5)
 
     def test_n_trapeser(self):
         n_t = n_trapeser(lambda x: x, 0, 1, 50)
-        self.assertTrue(np.abs(n_t - .5) < 1e-15)
+        self.assertAlmostEqual(n_t, .5)

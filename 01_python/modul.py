@@ -24,5 +24,5 @@ def dobbel(x):
 class test_modul(unittest.TestCase):
 
     def test_dobbel(self):
-        self.assertTrue(dobbel(3) == 6)
-        self.assertTrue(dobbel(7.4) == 14.8)
+        self.assertEqual(dobbel(3), 6)
+        self.assertAlmostEqual(dobbel(7.4), 14.8)
