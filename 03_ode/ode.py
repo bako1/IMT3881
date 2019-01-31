@@ -64,8 +64,8 @@ def heun(f, n, t0, t_end, y0):
     for i in range(n):
         y_verdier[i + 1] = y_verdier[i] + \
                           .5 * delta_t * (f(y_verdier[i]) +
-                                     f(y_verdier[i] +
-                                       delta_t * f(y_verdier[i])))
+                                          f(y_verdier[i] +
+                                          delta_t * f(y_verdier[i])))
     return y_verdier
 
 
