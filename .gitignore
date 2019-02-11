@@ -1,4 +1,5 @@
 .ipynb_checkpoints
+None*.png
 __pycache__
 .coverage
 htmlcov
