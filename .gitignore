@@ -1,6 +1,7 @@
 .ipynb_checkpoints
 None*.png
 loesn*.py
+loesn*.ipynb
 __pycache__
 .coverage
 htmlcov
