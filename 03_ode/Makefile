@@ -1,3 +1,5 @@
+.PHONY: test clean
+
 test:
 	coverage run --source=. -m unittest ode.py && coverage html
 
