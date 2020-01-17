@@ -2,9 +2,9 @@ import unittest
 import numpy as np
 
 
-def ett_trapes(f, a, b):
+def rektangel(f, a, b, n, pos='venstre'):
     """
-    Numerisk integrasjon av funksjonen f med ett trapes (ESC 1.3.1)
+    Numerisk integrasjon av funksjonen f med midt punkt metode)
 
     Parameters
     ----------
@@ -14,76 +14,63 @@ def ett_trapes(f, a, b):
         Startverdi for integrasjonsintervallet
     b : float
         Sluttverdi for integrasjonsintervallet
+    n: antall rektangel
+    pos: hvilket punkt integreringen går på
+         
 
     Returns
     -------
     float :
         Tilnærmet verdi for integralet
     """
-    return 0.5 * (b - a) * (f(a) + f(b))
+    h=(b-a)/n
+    if pos=='venstre':
+        start=a
+    elif pos=='midt':
+        start=a+h/2.0
+    else:
+        start=a+h
+    resultat=0
+    for i in range(n):
+        resultat+=f((start)+ i*h)
+    resultat *= h
+    return resultat
 
 
-def to_trapeser(f, a, b):
+def f_feilanalyse(x):
+   
+    
     """
-    Numerisk integrasjon av funksjonen f med to trapeser (ESC 1.3.2)
-
+bregner og returnerersvaret 
     Parameters
     ----------
-    f : function
-        Funksjonen som skal integreres
-    a : float
-        Startverdi for integrasjonsintervallet
-    b : float
-        Sluttverdi for integrasjonsintervallet
+    f : x float/int
+    
 
     Returns
     -------
     float :
-        Tilnærmet verdi for integralet
+        Tilnærmet verdi for bregnet svar
     """
-    c = .5 * (a + b)            # midtpunkt
-    return 0.25 * (b - a) * (f(a) + 2 * f(c) + f(b))
+    return (1 + x) * np.exp(x)
 
 
-def n_trapeser(f, a, b, n):
-    """
-    Numerisk integrasjon av funksjonen f med n trapeser (ESC 1.3.3)
 
-    Parameters
-    ----------
-    f : function
-        Funksjonen som skal integreres
-    a : float
-        Startverdi for integrasjonsintervallet
-    b : float
-        Sluttverdi for integrasjonsintervallet
-    n : int
-        Antall trapeser
-
-    Returns
-    -------
-    float :
-        Tilnærmet verdi for integralet
-    """
-    h = (b - a) / n
-    x_punkter = np.linspace(a, b, n + 1)
-    return h * (0.5 * f(x_punkter[0]) +
-                0.5 * f(x_punkter[-1]) +
-                f(x_punkter[1:-1]).sum())
 
 
 # Tester
 
 class test_integrasjon(unittest.TestCase):
 
-    def test_ett_trapes(self):
-        ett_t = ett_trapes(lambda x: x, 0, 1)
-        self.assertAlmostEqual(ett_t, .5)
+    def test_rektangel(self):
+        v_f_verdi=(1+1.5*np.exp(0.5))*0.5 #integrert vhm venstre punkt
+        m_f_verdi=0.5*(1.25*np.exp(0.25) + 1.75*np.exp(0.75)) #integrert vhm midt punkt
+        h_f_verdi=0.5*(1.5*np.exp(0.5)+2*np.e) #integrert vhm høyre punkt
+        
+        test_venstre=rektangel(f_feilanalyse, 0, 1, 2, pos='venstre')
+        self.assertAlmostEqual(test_venstre,v_f_verdi )
+        test_midt=rektangel(f_feilanalyse,0,1,2, pos='midt')
+        self.assertAlmostEqual(test_midt,m_f_verdi)
+        test_høyre=rektangel(f_feilanalyse, 0, 1, 2, pos='høyre')
+        self.assertAlmostEqual(test_høyre, h_f_verdi)
 
-    def test_to_trapeser(self):
-        to_t = to_trapeser(lambda x: x, 0, 1)
-        self.assertAlmostEqual(to_t, .5)
-
-    def test_n_trapeser(self):
-        n_t = n_trapeser(lambda x: x, 0, 1, 50)
-        self.assertAlmostEqual(n_t, .5)
