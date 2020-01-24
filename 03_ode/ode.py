@@ -1,82 +1,43 @@
 import numpy as np
-import unittest
+import matplotlib.pyplot as plt
+def eksplisitt(N,T,a,y_0):
+
+    delta_t = T/N
+    y_verdier_eks = np.zeros(N + 1) 
+    n_verdier = np.arange(N + 1)
+    t_verdier = delta_t * n_verdier
+    y_verdier_eks[0] = y_0
+    for i in range(N):
+        y_verdier_eks[i + 1] = delta_t*a*y_verdier_eks[i]+y_verdier_eks[i]
+    plt.plot(t_verdier, y_verdier_eks)
+    return y_verdier_eks
+
+def crank_nicolson(N,T,a,y_0):
+
+    delta_t = T/N
+    y_verdier_crank = np.zeros(N + 1) 
+    n_verdier = np.arange(N + 1)
+    t_verdier = delta_t * n_verdier
+    y_verdier_crank[0] = y_0
+    for i in range(N):
+        y_verdier_crank[i + 1] = y_verdier_crank[i]*((1+ a*delta_t*0.5)/(1-a*delta_t*0.5))
+    plt.plot(t_verdier, y_verdier_crank)
+
+    return y_verdier_crank
 
 
-def eksplisitt(f, n, t0, t_end, y0):
-    """
-    Løs ode-en med eksplisitt metode.
 
-    Løser y' = f(y) for y(t) fra t0 til t_end i n steg med y(t0) = y0.
+def implisitt(N,T,a,y_0):
+    delta_t = T/N
+    n_verdier = np.arange(N + 1)
+    y_verdier_impl = np.zeros(N + 1)  
+    y_verdier_impl[0] = y_0
+    t_verdier = delta_t * n_verdier
 
-    Paramters
-    ---------
-    f : func
-        Funksjonen som beskriver differensialligningen
-    n : int
-        Antall steg
-    t0 : float
-        Starttidspunkt
-    t_end: float
-        Sluttidspunkt
-    y0 : float
-        Initialverdi
+    
+    for i in range(N):
+        y_verdier_impl[i + 1] = y_verdier_impl[i]/(1-a*delta_t)
+    plt.plot(t_verdier, y_verdier_impl)
+    return y_verdier_impl
 
-    Returns
-    -------
-    array:
-        Beregnede verdier for y(t)
-    """
-    delta_t = (t_end - t0) / n
-    y_verdier = np.zeros(n + 1)  # allocate the space
-    y_verdier[0] = y0
-    for i in range(n):
-        y_verdier[i + 1] = y_verdier[i] + delta_t * f(y_verdier[i])
-    return y_verdier
-
-
-def heun(f, n, t0, t_end, y0):
-    """
-    Løs ode-en med Heuns metodel
-
-    Løser y' = f(y) for y(t) fra t0 til t_end i n steg med y(t0) = y0.
-
-    Paramters
-    ---------
-    f : func
-        Funksjonen som beskriver differensialligningen
-    n : int
-        Antall steg
-    t0 : float
-        Starttidspunkt
-    t_end: float
-        Sluttidspunkt
-    y0 : float
-        Initialverdi
-
-    Returns
-    -------
-    array:
-        Beregnede verdier for y(t)
-    """
-    delta_t = (t_end - t0) / n
-    y_verdier = np.zeros(n + 1)  # allocate the space
-    y_verdier[0] = y0
-    for i in range(n):
-        y_verdier[i + 1] = y_verdier[i] + \
-                          .5 * delta_t * (f(y_verdier[i]) +
-                                          f(y_verdier[i] +
-                                          delta_t * f(y_verdier[i])))
-    return y_verdier
-
-
-# Tester
-
-class test_ode(unittest.TestCase):
-
-    def test_eksplisitt(self):
-        y = eksplisitt(lambda x: x, 1, 0, 1, 1)
-        self.assertAlmostEqual(y[-1], 2)
-
-    def test_heun(self):
-        y = heun(lambda x: x, 1, 0, 1, 1)
-        self.assertAlmostEqual(y[-1], 2.5)
+#eksplisitt(2,2,1,1)
